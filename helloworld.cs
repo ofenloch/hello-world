@@ -6,13 +6,13 @@ using System;
 namespace MyApp
 {
 
-    internal class helloworld
+    internal class HelloWorld
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
         }
 
-    } // class helloworld
+    } // class HelloWorld
 
 } // namespace MyApp
