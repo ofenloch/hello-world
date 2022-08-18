@@ -1,39 +1,26 @@
 // This is a .NET 5 (and earlier) console app template
 // (See https://aka.ms/new-console-template for more information)
 
-using Microsoft.Extensions.Logging;
-using System;
+using NLog;
+using NLog.Targets;
+using System.Text;
 
 namespace MyApp
 {
 
     internal class HelloWorld
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         static void Main(string[] args)
         {
 
-            using ILoggerFactory loggerFactory =
-                LoggerFactory.Create(builder =>
-                    builder.AddSimpleConsole(options =>
-                    {
-                        options.IncludeScopes = true;
-                        options.SingleLine = true;
-                        options.TimestampFormat = "hh:mm:ss ";
-                    }));
+            Logger.Trace("Trace");
+            Logger.Debug("Debug");
+            Logger.Info("Info");
+            Logger.Warn("Warn");
+            Logger.Error("Error");
+            Logger.Fatal("Fatal");
 
-            ILogger<HelloWorld> logger = loggerFactory.CreateLogger<HelloWorld>();
-            using (logger.BeginScope("[scope is enabled]"))
-            {
-                logger.LogInformation("Logs contain timestamp and log level.");
-                logger.LogInformation("Each log message is fit in a single line.");
-                logger.LogTrace("Trace");
-                logger.LogDebug("Debug");
-                logger.LogInformation("Info");
-                logger.LogWarning("Warning");
-                logger.LogError("Error");
-                logger.LogCritical("Critical");
-
-            }
 
             Console.WriteLine("Hello, World!");
 
