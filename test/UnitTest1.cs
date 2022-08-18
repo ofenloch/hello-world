@@ -1,12 +1,21 @@
 using Xunit;
 
-namespace unit_tests;
+using Library;
 
-public class UnitTest1
+namespace Library.UnitTests
 {
-    [Fact]
-    public void Test1()
-    {
 
+    public class UnitTest1
+    {
+        [Fact]
+        public void Test1()
+        {
+            double a = 13;
+            double b = 31;
+            double expectedValue = a + b;
+            double actualValue = Library.MyMath.Add(a, b);
+            Assert.True(expectedValue == actualValue , $"actual value {actualValue} should be equal to {expectedValue}");
+        }
     }
-}
+
+} // namespace Library.UnitTests
