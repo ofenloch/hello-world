@@ -4,12 +4,24 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "Hello",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build solution",
             "program": "${workspaceFolder}/bin/Debug/net6.0/hello-world.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Unit Tests - not working",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build solution",
+            "program": "${workspaceFolder}/test/bin/Debug/net6.0/unit-tests.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
