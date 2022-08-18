@@ -318,3 +318,62 @@ idx 102: no such element in DataStore
 ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
 ```
 
+After browsin the MS docs for a while, I decided that this is too cumbersome. I just want 
+to write to a log file, and I don't want to implement my own Logger Provider. So I switched to 
+[NLog](https://github.com/NLog/).
+
+Within minutes I was able to write to a log file.
+
+The config file *NLog.config* must be copied to the binary directory (bin/Debug/net6.0/NLog.config in our case). 
+The log file is created in the same directory.
+
+The first draft of file *NLog.config* is
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <targets>
+        <target name="logfile" xsi:type="File" fileName="./hello-world.log" />
+        <target name="logconsole" xsi:type="Console" />
+    </targets>
+
+    <rules>
+        <logger name="*" minlevel="Warn" writeTo="logconsole" />
+        <logger name="*" minlevel="Debug" writeTo="logfile" />
+    </rules>
+</nlog>
+```
+
+The C# code is simple, too:
+
+```C#
+using NLog;
+using NLog.Targets;
+using System.Text;
+
+namespace MyApp
+{
+
+    internal class HelloWorld
+    {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        static void Main(string[] args)
+        {
+
+            Logger.Trace("Trace");
+            Logger.Debug("Debug");
+            Logger.Info("Info");
+            Logger.Warn("Warn");
+            Logger.Error("Error");
+            Logger.Fatal("Fatal");
+
+        }
+
+    } // class HelloWorld
+
+} // namespace MyApp
+```
+
+This seems to be what I was looking for.
