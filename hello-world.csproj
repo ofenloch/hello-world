@@ -6,6 +6,13 @@
     <RootNamespace>hello_world</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- set EnableDefaultCompileItems to false -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+
+  <!-- specify the source files to be used for this project -->
+  <ItemGroup>
+    <Compile Include="src/*.cs" />
+  </ItemGroup>
 
 </Project>

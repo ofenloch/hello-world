@@ -4,6 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- set EnableDefaultCompileItems to false -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+
+  <!-- specify the source files to be used for this project -->
+  <ItemGroup>
+    <Compile Include="./*.cs" />
+  </ItemGroup>
 
 </Project>
