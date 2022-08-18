@@ -257,3 +257,64 @@ A total of 1 test files matched the specified pattern.
 Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - /home/ofenloch/workspaces/dotnet/hello-world/test/bin/Debug/net6.0/unit-tests.dll (net6.0)
 ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
 ```
+
+## Add Logging
+
+First of all we add the required packages to out project files:
+
+* `dotnet add package Microsoft.Extensions.Logging.Console`
+
+* `dotnet add lib/library.csproj package Microsoft.Extensions.Logging.Console`
+
+* `dotnet add test/unit-tests.csproj package Microsoft.Extensions.Logging.Console`
+
+The we add some logging code to out Main in file *src/HelloWorld.cs*:
+
+```C#
+            using ILoggerFactory loggerFactory =
+                LoggerFactory.Create(builder =>
+                    builder.AddSimpleConsole(options =>
+                    {
+                        options.IncludeScopes = true;
+                        options.SingleLine = true;
+                        options.TimestampFormat = "hh:mm:ss ";
+                    }));
+
+            ILogger<HelloWorld> logger = loggerFactory.CreateLogger<HelloWorld>();
+            using (logger.BeginScope("[scope is enabled]"))
+            {
+                logger.LogInformation("Logs contain timestamp and log level.");
+                logger.LogInformation("Each log message is fit in a single line.");
+                logger.LogTrace("Trace");
+                logger.LogDebug("Debug");
+                logger.LogInformation("Info");
+                logger.LogWarning("Warning");
+                logger.LogError("Error");
+                logger.LogCritical("Critical");
+
+            }
+```
+
+This sample was stolen from [https://github.com/dotnet/docs/blob/main/docs/core/extensions/snippets/logging/console-formatter-simple/Program.cs](https://github.com/dotnet/docs/blob/main/docs/core/extensions/snippets/logging/console-formatter-simple/Program.cs).
+
+
+Now, we have a logger logging to the console at log level INFO:
+
+```bash
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ dotnet run
+Hello, World!
+06:49:10 info: MyApp.HelloWorld[0] => [scope is enabled] Logs contain timestamp and log level.
+06:49:10 info: MyApp.HelloWorld[0] => [scope is enabled] Each log message is fit in a single line.
+06:49:10 info: MyApp.HelloWorld[0] => [scope is enabled] Info
+06:49:10 warn: MyApp.HelloWorld[0] => [scope is enabled] Warning
+06:49:10 fail: MyApp.HelloWorld[0] => [scope is enabled] Error
+06:49:10 crit: MyApp.HelloWorld[0] => [scope is enabled] Critical
+1.234 plus 4.321 makes 5.555
+1.234 times 4.321 makes 5.332114
+idx 42: key 42, value This is element 42.
+idx 100: no such element in DataStore
+idx 101: no such element in DataStore
+idx 102: no such element in DataStore
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
+```
+
