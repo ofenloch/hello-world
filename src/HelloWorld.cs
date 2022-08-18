@@ -14,6 +14,9 @@ namespace MyApp
         static void Main(string[] args)
         {
 
+            string LOGDIR=Environment.GetEnvironmentVariable("LOGDIR");
+            Console.WriteLine(String.Format("LOGDIR is {0}", LOGDIR));
+
             Logger.Trace("Trace");
             Logger.Debug("Debug");
             Logger.Info("Info");
