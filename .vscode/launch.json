@@ -12,6 +12,9 @@
             "preLaunchTask": "build solution",
             "program": "${workspaceFolder}/bin/Debug/net6.0/hello-world.dll",
             "args": [],
+            "environment": [
+                { "name": "LOGDIR", "value" : "${workspaceFolder}" }
+            ],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
@@ -23,6 +26,9 @@
             "preLaunchTask": "build solution",
             "program": "${workspaceFolder}/test/bin/Debug/net6.0/unit-tests.dll",
             "args": [],
+            "environment": [
+                { "name": "LOGDIR", "value" : "${workspaceFolder}" }
+            ],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
