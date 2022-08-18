@@ -23,6 +23,15 @@ namespace Library
             }
             return a / b;
         }
+
+        public static bool IsPrime(int candidate)
+        {
+            if (candidate <= 1)
+            {
+                return false;
+            }
+            throw new NotImplementedException("Not fully implemented.");
+        }
     } // public class MyMath
 
 } // namespace Library
