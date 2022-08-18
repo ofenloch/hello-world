@@ -1,6 +1,6 @@
 namespace Library
 {
-    class DataStore<TKey, TValue>
+    public class DataStore<TKey, TValue>
     {
         List<Pair<TKey, TValue>> _list;
         int _size;
@@ -53,6 +53,6 @@ namespace Library
             }
             return _list[index].GetValue();
         }
-    } // class DataRecord<TKey, TValue>
+    } // public class DataStore<TKey, TValue>
 
 } // namespace Library

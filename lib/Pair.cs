@@ -1,6 +1,6 @@
 namespace Library
 {
-    class Pair<TKey, TValue>
+    public class Pair<TKey, TValue>
     {
 
         // this is the key of the current value;
@@ -22,6 +22,6 @@ namespace Library
             return _value;
         }
 
-    } // class Pair<TKey, TValue>
+    } // public class Pair<TKey, TValue>
 
 } // namespace Library

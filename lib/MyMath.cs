@@ -1,7 +1,7 @@
 namespace Library
 {
 
-    class MyMath
+    public class MyMath
     {
         public static double Add(double a, double b)
         {
@@ -23,6 +23,6 @@ namespace Library
             }
             return a / b;
         }
-    } // class MyMath
+    } // public class MyMath
 
 } // namespace Library
