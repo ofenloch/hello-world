@@ -14,5 +14,8 @@
   <ItemGroup>
     <Compile Include="src/*.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="lib\library.csproj" />
+  </ItemGroup>
 
 </Project>
