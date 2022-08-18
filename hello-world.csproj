@@ -21,4 +21,9 @@
     <PackageReference Include="NLog" Version="5.0.2" />
   </ItemGroup>
 
+  <!-- copy file Log.config to target directory -->
+  <ItemGroup >
+    <None Update="NLog.config" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
