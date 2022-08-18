@@ -36,6 +36,15 @@
                 "${workspaceFolder}/hello-world.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "unittest",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }
