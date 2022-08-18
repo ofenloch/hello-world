@@ -320,7 +320,7 @@ ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
 
 After browsin the MS docs for a while, I decided that this is too cumbersome. I just want 
 to write to a log file, and I don't want to implement my own Logger Provider. So I switched to 
-[NLog](https://github.com/NLog/).
+[NLog](https://nlog-project.org/).
 
 Within minutes I was able to write to a log file.
 
