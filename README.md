@@ -2,6 +2,9 @@
 
 This is a simple demo to show how to set up a larger C# project without Visual Studio. I did this on my Debian machine with bash and VS Code.
 
+The entire information about how to use the .NET command line interface **dotnet** is available at [https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet).
+
+
 ## Create A Solution File And Two Project Files
 
 When we creat a project with `dotnet new console --language C# --name hello-world` a project file
