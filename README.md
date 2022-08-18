@@ -161,3 +161,99 @@ Running `dotnet build`in the project's root looks promising. But we get some "pr
 
 
 To resolve them, we have to declare the classes in our library project as public. At least the ones we want to use outside their namespace.
+
+
+## Adding Unit Tests
+
+
+The docs at [https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test) say we should run `dotnet new xunit -n unit-tests -o ./test/` in the project's root. This creates the folder ./test/ with two new files:
+
+* test/unit-tests.csproj
+* test/UnitTest1.cs
+
+```bash
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ dotnet new xunit -n unit-tests -o ./test/
+The template "xUnit Test Project" was created successfully.
+
+Processing post-creation actions...
+Running 'dotnet restore' on /home/ofenloch/workspaces/dotnet/hello-world/test/unit-tests.csproj...
+  Determining projects to restore...
+  Restored /home/ofenloch/workspaces/dotnet/hello-world/test/unit-tests.csproj (in 7.42 sec).
+Restore succeeded.
+
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
+```
+The other files - especially the solution file *create-dotnet-project.sh* - are not affected by this command.
+
+With the things learnt above in mind, we modify the unit test project file *test/unit-tests.csproj*:
+
+* we specify the source to be included
+* we add a ProjectReference to our library (because that's what we want to test)
+
+The new - modified - project file *test/unit-tests.csproj* looks like this
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>unit_tests</RootNamespace>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <!-- set EnableDefaultCompileItems to false -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- specify the source files to be used for this project -->
+  <ItemGroup>
+    <Compile Include="./*.cs" />
+  </ItemGroup>
+
+  <!-- add a reference to our library -->
+  <ItemGroup>
+    <ProjectReference Include="..\lib\library.csproj" />
+  </ItemGroup>
+
+</Project>
+```
+
+Of cource we add the unit test project to our solution file *hello-world.sln* with `dotnet sln add ./test/unit-tests.csproj`:
+
+```bash
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ dotnet sln add ./test/unit-tests.csproj 
+Project `test/unit-tests.csproj` added to the solution.
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
+```
+
+To run our test(s) we simple execute `dotnet test`:
+
+```bash
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ dotnet test
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  library -> /home/ofenloch/workspaces/dotnet/hello-world/lib/bin/Debug/net6.0/library.dll
+  unit-tests -> /home/ofenloch/workspaces/dotnet/hello-world/test/bin/Debug/net6.0/unit-tests.dll
+Test run for /home/ofenloch/workspaces/dotnet/hello-world/test/bin/Debug/net6.0/unit-tests.dll (.NETCoreApp,Version=v6.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.1.0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - /home/ofenloch/workspaces/dotnet/hello-world/test/bin/Debug/net6.0/unit-tests.dll (net6.0)
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
+```
