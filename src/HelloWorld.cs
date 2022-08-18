@@ -18,6 +18,33 @@ namespace MyApp
             double prod = Library.MyMath.Multiply(x, y);
             Console.WriteLine(String.Format("{0} plus {1} makes {2}", x, y, sum));
             Console.WriteLine(String.Format("{0} times {1} makes {2}", x, y, prod));
+
+
+            Library.DataStore<int, string> myData = new Library.DataStore<int, string>();
+            for (int i = 0; i < 100; i++)
+            {
+                string text = string.Format("This is element {0}.", i);
+                myData.Add(i, text);
+            }
+
+            PrintElement(myData, 42);
+            PrintElement(myData, 100);
+            PrintElement(myData, 101);
+            PrintElement(myData, 102);
+
+        }
+        public static void PrintElement(Library.DataStore<int, string> Store, int index)
+        {
+            Library.Pair<int, string>? element = Store.GetElementByIndex(index);
+            if (element is Library.Pair<int, string> valueOfElment)
+            {
+                Console.WriteLine(String.Format("idx {0}: key {1}, value {2}", index,
+                    element.GetKey(), element.GetValue()));
+            }
+            else
+            {
+                Console.WriteLine(String.Format("idx {0}: no such element in DataStore", index));
+            }
         }
 
     } // class HelloWorld
