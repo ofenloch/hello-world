@@ -377,3 +377,23 @@ namespace MyApp
 ```
 
 This seems to be what I was looking for.
+
+After some research, I found this solution for the logger's proper configurations:
+
+* set up the project to copy the *NLog.config* to the output directory by adding
+  ```xml
+  <!-- copy file Log.config to target directory -->
+  <ItemGroup >
+    <None Update="NLog.config" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  ```
+* set environment variable LOGDIR to a proper value, e.g. in *.vscode/launch.json*:
+  ```json
+  "environment": [
+      { "name": "LOGDIR", "value" : "${workspaceFolder}" }
+  ],
+   ```
+* use environment variable LOGDIR in *NLog.config*, e.g.
+  ```xml
+  <target name="logfile" xsi:type="File" fileName="${environment:LOGDIR}/hello-world.log" />
+  ```
