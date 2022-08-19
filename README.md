@@ -1,13 +1,14 @@
 # hello-world with C#
 
-This is a simple demo to show how to set up a larger C# project without Visual Studio. I did this on my Debian machine with bash and VS Code.
+This is a simple demo project demonstrating how to set up a larger C# project without 
+Visual Studio. I did this on my Debian machine with bash and VS Code.
 
-The entire information about how to use the .NET command line interface **dotnet** is available at [https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet).
-
+The entire information about how to use the .NET command line interface **dotnet** 
+is available at [https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet).
 
 ## Create A Solution File And Two Project Files
 
-When we creat a project with `dotnet new console --language C# --name hello-world` a project file
+When we create a project with `dotnet new console --language C# --name hello-world` a project file
 *hello-world.csproj* is generated. It looks like this:
 
 ```xml
@@ -25,7 +26,8 @@ When we creat a project with `dotnet new console --language C# --name hello-worl
 ```
 
 
-Executing `dotnet new sln`in our project folder creates a new, empty solution file *hello-world.sln*. The file looks like this:
+Executing `dotnet new sln` in our project folder creates a new, empty solution file 
+*hello-world.sln*. The file looks like this:
 
 ```s
 Microsoft Visual Studio Solution File, Format Version 12.00
@@ -91,11 +93,11 @@ To avoid that the main project in file *hello-world.csproj* uses all sources in 
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
 in the <PropertyGroup> and add a new entry
-
+```xml
     <ItemGroup>
         <Compile Include = "src/*.cs"/>
     </ItemGroup>
-
+```
 If we don't do this, we get errors like 
 
     error CS0579: Duplicate 'System.Reflection.AssemblyCompanyAttribute' attribute  ...
@@ -231,7 +233,7 @@ The new - modified - project file *test/unit-tests.csproj* looks like this
 </Project>
 ```
 
-Of cource we add the unit test project to our solution file *hello-world.sln* with `dotnet sln add ./test/unit-tests.csproj`:
+Of course we add the unit test project to our solution file *hello-world.sln* with `dotnet sln add ./test/unit-tests.csproj`:
 
 ```bash
 ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ dotnet sln add ./test/unit-tests.csproj 
@@ -239,7 +241,7 @@ Project `test/unit-tests.csproj` added to the solution.
 ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
 ```
 
-To run our test(s) we simple execute `dotnet test`:
+To run our test(s) we simply execute `dotnet test`:
 
 ```bash
 ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ dotnet test
@@ -268,7 +270,7 @@ First of all we add the required packages to out project files:
 
 * `dotnet add test/unit-tests.csproj package Microsoft.Extensions.Logging.Console`
 
-The we add some logging code to out Main in file *src/HelloWorld.cs*:
+Then we add some logging code to our Main in file *src/HelloWorld.cs*:
 
 ```C#
             using ILoggerFactory loggerFactory =
@@ -318,13 +320,17 @@ idx 102: no such element in DataStore
 ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
 ```
 
-After browsin the MS docs for a while, I decided that this is too cumbersome. I just want 
-to write to a log file, and I don't want to implement my own Logger Provider. So I switched to 
-[NLog](https://nlog-project.org/).
+What I really want is a logger writing to a file.
+
+After browsing the MS docs for a while, I decided that this is too cumbersome. I found a lot of stuff about 
+"Logger Provider" and "Extending Logger" but nothing logging to a file. I just want 
+to write to a log file, and I don't want to implement my own Logger Provider. 
+
+**So, I decided to use [NLog](https://nlog-project.org/) instead.**
 
 Within minutes I was able to write to a log file.
 
-The config file *NLog.config* must be copied to the binary directory (bin/Debug/net6.0/NLog.config in our case). 
+The config file *NLog.config* has to be copied to the binary directory (bin/Debug/net6.0/NLog.config in our case). 
 The log file is created in the same directory.
 
 The first draft of file *NLog.config* is
@@ -376,9 +382,9 @@ namespace MyApp
 } // namespace MyApp
 ```
 
-This seems to be what I was looking for.
+This seems to be what I was looking for...
 
-After some research, I found this solution for the logger's proper configurations:
+After some research, I found this solution for the logger's proper configuration:
 
 * set up the project to copy the *NLog.config* to the output directory by adding
   ```xml
