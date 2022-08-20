@@ -10,7 +10,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
-  <!-- copy file ./data/NLog.config to target directory -->
+  <!-- copy file ./data/NLog.config to $(OutDir)/NLog.config -->
   <Target Name="CopyFiles">
     <Copy SourceFiles="./data/NLog.config" DestinationFolder="$(OutDir)" />
   </Target>
@@ -26,8 +26,8 @@
     <PackageReference Include="NLog" Version="5.0.2" />
   </ItemGroup>
 
-    <!-- copy file ./data/NLog.config to target directory -->
-    <!---
+  <!-- copy file ./data/NLog.config to target directory -->
+  <!---
       This creates a directory ./data/ with file NLog.conf in the $(OutDir).
       But we want ./data/NLog.config to be copied to $(OutDir)/NLog.config 
       instead of $(OutDir)/data/NLog.config.
@@ -37,6 +37,7 @@
       <None Update="./data/NLog.config" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
   -->
+
   <!-- create a single binary file that contains all we need to run the app -->
   <PropertyGroup>
     <PublishSingleFile>true</PublishSingleFile>

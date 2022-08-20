@@ -561,3 +561,25 @@ This would produce the distribution directory *~/tmp/HelloWorld* with this conte
 
 This directory can be used for the package mechanism (e.g. tar -czf ..., or npm ... ).
 
+Now we move the logger configuration to directory ./data/ in our project's root folder. Adjusting the 
+ItemGroup with the Update command to
+```xml
+    <ItemGroup>
+      <None Update="./data/NLog.config" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+```
+
+copies the config file to *\$(OutDir)/data/NLog.config* instead of *\$(OutDir)/NLog.config*.
+
+To get the logger's config file to the correct location, we define a new Target
+```xml
+  <!-- copy file ./data/NLog.config to $(OutDir)/NLog.config -->
+  <Target Name="CopyFiles">
+    <Copy SourceFiles="./data/NLog.config" DestinationFolder="$(OutDir)" />
+  </Target>
+```
+
+For `dotnet build` "building" this target, it must be listet as Default target in the Project:
+```xml
+<Project DefaultTargets="Build;CopyFiles" Sdk="Microsoft.NET.Sdk">
+```
