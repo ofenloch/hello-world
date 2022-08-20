@@ -22,8 +22,13 @@
   </ItemGroup>
 
   <!-- copy file Log.config to target directory -->
-  <ItemGroup >
+  <ItemGroup>
     <None Update="NLog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <!-- create a single binar file that contains all we need to run the app -->
+  <PropertyGroup>
+    <PublishSingleFile>true</PublishSingleFile>
+  </PropertyGroup>
 
 </Project>
