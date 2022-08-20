@@ -5,7 +5,6 @@ Visual Studio. At the end, we'll have this project structure
 
       workspaceFolder
       ├── hello-world.csproj
-      ├── hello-world.log
       ├── hello-world.sln
       ├── lib
       │   ├── Class1.cs
@@ -15,11 +14,16 @@ Visual Studio. At the end, we'll have this project structure
       │   └── Pair.cs
       ├── NLog.config
       ├── README.md
+      ├── scripts
+      │   ├── create-dotnet-project.sh
+      │   ├── make-clean.sh
+      │   └── package.sh
       ├── src
       │   └── HelloWorld.cs
       └── test
           ├── UnitTest1.cs
           └── unit-tests.csproj
+
 
 I did this on my Debian machine with bash and VS Code.
 
