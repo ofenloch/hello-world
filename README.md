@@ -4,25 +4,27 @@ This is a simple demo project demonstrating how to set up a larger C# project wi
 Visual Studio. At the end, we'll have this project structure
 
       workspaceFolder
-      ├── hello-world.csproj
-      ├── hello-world.sln
-      ├── lib
-      │   ├── Class1.cs
-      │   ├── DataList.cs
-      │   ├── library.csproj
-      │   ├── MyMath.cs
-      │   └── Pair.cs
-      ├── NLog.config
-      ├── README.md
-      ├── scripts
-      │   ├── create-dotnet-project.sh
-      │   ├── make-clean.sh
-      │   └── package.sh
-      ├── src
-      │   └── HelloWorld.cs
-      └── test
-          ├── UnitTest1.cs
-          └── unit-tests.csproj
+        ├── data
+        │   ├── NLog.config
+        │   └── package.json
+        ├── hello-world.csproj
+        ├── hello-world.sln
+        ├── lib
+        │   ├── Class1.cs
+        │   ├── DataList.cs
+        │   ├── library.csproj
+        │   ├── MyMath.cs
+        │   └── Pair.cs
+        ├── README.md
+        ├── scripts
+        │   ├── create-dotnet-project.sh
+        │   ├── make-clean.sh
+        │   └── package.sh
+        ├── src
+        │   └── HelloWorld.cs
+        └── test
+            ├── UnitTest1.cs
+            └── unit-tests.csproj
 
 
 I did this on my Debian machine with bash and VS Code.
