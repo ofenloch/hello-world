@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project DefaultTargets="Build;CopyFiles" Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,6 +9,11 @@
     <!-- set EnableDefaultCompileItems to false -->
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+
+  <!-- copy file ./data/NLog.config to target directory -->
+  <Target Name="CopyFiles">
+    <Copy SourceFiles="./data/NLog.config" DestinationFolder="$(OutDir)" />
+  </Target>
 
   <!-- specify the source files to be used for this project -->
   <ItemGroup>
@@ -21,11 +26,17 @@
     <PackageReference Include="NLog" Version="5.0.2" />
   </ItemGroup>
 
-  <!-- copy file Log.config to target directory -->
-  <ItemGroup>
-    <None Update="NLog.config" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
+    <!-- copy file ./data/NLog.config to target directory -->
+    <!---
+      This creates a directory ./data/ with file NLog.conf in the $(OutDir).
+      But we want ./data/NLog.config to be copied to $(OutDir)/NLog.config 
+      instead of $(OutDir)/data/NLog.config.
+      So, we define a target named CopyFiles and add it tot the project's
+      DefaultTargets.
+    <ItemGroup>
+      <None Update="./data/NLog.config" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+  -->
   <!-- create a single binary file that contains all we need to run the app -->
   <PropertyGroup>
     <PublishSingleFile>true</PublishSingleFile>
