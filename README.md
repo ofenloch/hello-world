@@ -6,7 +6,7 @@ Visual Studio. I did this on my Debian machine with bash and VS Code.
 The entire information about how to use the .NET command line interface **dotnet** 
 is available at [https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet).
 
-## Create A Solution File And Two Project Files
+## Creating A Solution File And Two Project Files
 
 When we create a project with `dotnet new console --language C# --name hello-world` a project file
 *hello-world.csproj* is generated. It looks like this:
@@ -260,7 +260,7 @@ Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration:
 ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
 ```
 
-## Add Logging
+## Adding Logging
 
 First of all we add the required packages to out project files:
 
@@ -388,7 +388,7 @@ After some research, I found this solution for the logger's proper configuration
 
 * set up the project to copy the *NLog.config* to the output directory by adding
   ```xml
-  <!-- copy file Log.config to target directory -->
+  <!-- copy file NLog.config to target directory -->
   <ItemGroup >
     <None Update="NLog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
@@ -403,3 +403,16 @@ After some research, I found this solution for the logger's proper configuration
   ```xml
   <target name="logfile" xsi:type="File" fileName="${environment:LOGDIR}/hello-world.log" />
   ```
+
+So, building the application copies the logger configuration file *NLog.config* to the target 
+directory. The launch configuration sets the environment variable LOGDIR to our project's root 
+directory. And the program itself logs to file *${environment:LOGDIR}/hello-world.log*.
+
+Without this setup (or an equivalent one) you have to do this "manually":
+
+`dotnet build`
+
+`/bin/cp -f NLog.config ./bin/Debug/net6.0/`
+
+`LOGDIR=$(pwd) dotnet ./bin/Debug/net6.0/hello-world.dll`
+
