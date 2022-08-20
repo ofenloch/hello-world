@@ -1,7 +1,27 @@
 # hello-world with C#
 
 This is a simple demo project demonstrating how to set up a larger C# project without 
-Visual Studio. I did this on my Debian machine with bash and VS Code.
+Visual Studio. At the end, we'll have this project structure
+
+      workspaceFolder
+      ├── hello-world.csproj
+      ├── hello-world.log
+      ├── hello-world.sln
+      ├── lib
+      │   ├── Class1.cs
+      │   ├── DataList.cs
+      │   ├── library.csproj
+      │   ├── MyMath.cs
+      │   └── Pair.cs
+      ├── NLog.config
+      ├── README.md
+      ├── src
+      │   └── HelloWorld.cs
+      └── test
+          ├── UnitTest1.cs
+          └── unit-tests.csproj
+
+I did this on my Debian machine with bash and VS Code.
 
 The entire information about how to use the .NET command line interface **dotnet** 
 is available at [https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet).
