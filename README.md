@@ -436,3 +436,122 @@ Without this setup (or an equivalent one) you have to do this "manually":
 
 `LOGDIR=$(pwd) dotnet ./bin/Debug/net6.0/hello-world.dll`
 
+## Publishing The App (Deployment)
+
+Running the command 
+
+`dotnet publish -c Release` 
+
+builds the solution and creates a the binary
+*bin/Release/net6.0/publish/hello-world*. To execute this binary we simply run 
+
+`./bin/Release/net6.0/publish/hello-world`  
+
+or `LOGDIR=$(pwd) bin/Release/net6.0/publish/hello-world` 
+if we want to set the log directory.
+
+The [docs](https://docs.microsoft.com/en-us/dotnet/core/deploying/deploy-with-cli) say there's 
+three ways of publishing an app:
+
+* **Framework-dependent deployment** produces a cross-platform .dll file that uses the locally installed .NET runtime. 
+* **Framework-dependent executable** produces a platform-specific executable that uses the locally installed .NET runtime. 
+* **Self-contained executable** produces a platform-specific executable and includes a local copy of the .NET runtime.
+
+(see [.NET application publishing overview](https://docs.microsoft.com/en-us/dotnet/core/deploying/) for more details)
+
+So, running `dotnet publish -r linux-x64 --self-contained -c Release` produces a "self-contained" app for a 64Bit Linux 
+system in folder *./bin/Release/net6.0/linux-x64/publish/*. I put the "self-contained" in quotes because the app seems 
+to need all files in this folder.
+
+Running `dotnet publish -r win10-x64 --self-contained -c Release` does the same for a Windows 10 (or 11) system. The 
+executable is *./bin/Release/net6.0/win10-x64/publish/hello-world.exe*. I assume the entire folder is needed, too, 
+but I'd have to verify this on a Windows machine.
+
+The various Runtime IDs (RIDs) are listed in the [.NET RID Catalog](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog).
+
+Adding
+
+```xml
+  <!-- create a single binar file that contains all we need to run the app -->
+  <PropertyGroup>
+    <PublishSingleFile>true</PublishSingleFile>
+  </PropertyGroup>
+```
+
+to the project file *hello-world.csproj* enables us to create a single file that can be run without an other dependencies.
+
+The command `dotnet publish -r linux-x64 --self-contained true -c Release` creates the file 
+*./bin/Release/net6.0/linux-x64/publish/hello-world* which can be run as a stand-alone binary.
+
+We copy the stand-alone binary to an empty directory and try to run it. Of course we have to copy the logger 
+config *NLog.config*, too, if we want logging to work properly.
+
+```bash
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ /bin/cp bin/Release/net6.0/linux-x64/publish/hello-world ~/tmp/
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ /bin/cp NLog.config ~/tmp/
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ LOGDIR=~/tmp/ ~/tmp/hello-world 
+Hello, World!
+1.234 plus 4.321 makes 5.555
+1.234 times 4.321 makes 5.332114
+idx 42: key 42, value This is element 42.
+2022-08-20 08:42:47.5491|WARN|MyApp.HelloWorld|idx 100: no such element in DataStore
+idx 100: no such element in DataStore
+2022-08-20 08:42:47.5491|WARN|MyApp.HelloWorld|idx 101: no such element in DataStore
+idx 101: no such element in DataStore
+2022-08-20 08:42:47.5491|WARN|MyApp.HelloWorld|idx 102: no such element in DataStore
+idx 102: no such element in DataStore
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$ ll ~/tmp/
+total 63M
+drwxr-xr-x  2 ofenloch teben 4.0K 2022-08-20--08-42-47 ./
+drwxr-xr-x 17 ofenloch teben 4.0K 2022-08-19--03-53-44 ../
+-rwxr-xr-x  1 ofenloch teben  63M 2022-08-20--08-37-56 hello-world*
+-rw-r--r--  1 ofenloch teben  704 2022-08-20--08-42-47 hello-world.log
+-rw-r--r--  1 ofenloch teben  912 2022-08-20--08-42-42 NLog.config
+ofenloch@3fb1caa5b6d0:~/workspaces/dotnet/hello-world$
+```
+
+To produce a binary for Windows 10 (and 11), we execute `dotnet publish -r win10-x64 --self-contained true -c Release`. Again: I still have to test this binary on my Windows machine.
+
+So, a simple deployment / packaging script could look like this
+
+```bash
+#!/bin/bash
+
+DIST_DIR=~/tmp/HelloWorld
+
+/bin/rm -rf ${DIST_DIR}
+/usr/bin/mkdir -p ${DIST_DIR}/linux-x64
+/usr/bin/mkdir -p ${DIST_DIR}/win10-x64
+
+dotnet publish -r linux-x64 --self-contained true -c Release
+/bin/cp -f bin/Release/net6.0/linux-x64/publish/hello-world ${DIST_DIR}/linux-x64
+/bin/cp -f NLog.config ${DIST_DIR}/linux-x64
+
+dotnet publish -r win10-x64 --self-contained true -c Release
+/bin/cp -f bin/Release/net6.0/win10-x64/publish/hello-world.exe ${DIST_DIR}/win10-x64
+/bin/cp -f NLog.config ${DIST_DIR}/win10-x64
+
+cat << _END_OF_README_MD_ > ${DIST_DIR}/README.md
+# Hello World With .NET and C#
+
+This is a simple demo project demonstrating how to set up a 
+larger C# project with .NET CLI (without Visual Studio).
+
+There is a [GitHub repository](https://github.com/ofenloch/hello-world.git) with all source files.
+
+_END_OF_README_MD_
+```
+
+This would produce the distribution directory *~/tmp/HelloWorld* with this contents:
+
+      HelloWorld
+          ├── linux-x64
+          │   ├── hello-world
+          │   └── NLog.config
+          ├── README.md
+          └── win10-x64
+              ├── hello-world.exe
+              └── NLog.config
+
+This directory can be used for the package mechanism (e.g. tar -czf ..., or npm ... ).
+
