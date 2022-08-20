@@ -26,7 +26,7 @@
     <None Update="NLog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <!-- create a single binar file that contains all we need to run the app -->
+  <!-- create a single binary file that contains all we need to run the app -->
   <PropertyGroup>
     <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
