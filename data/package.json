@@ -1,0 +1,22 @@
+{
+  "name": "hello-world",
+  "version": "VERSIONSTRING",
+  "description": "simple demo project demonstrating how to set up a larger C# project with .NET CLI",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ofenloch/hello-world.git"
+  },
+  "keywords": [
+    ".net",
+    "c#",
+    "project-management",
+    "unittesting",
+    "csproj",
+    "sln"
+  ],
+  "author": "Oliver Ofenloch <57812959+ofenloch@users.noreply.github.com>",
+  "license": "ISC"
+}
