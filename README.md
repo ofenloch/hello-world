@@ -583,3 +583,10 @@ For `dotnet build` "building" this target, it must be listet as Default target i
 ```xml
 <Project DefaultTargets="Build;CopyFiles" Sdk="Microsoft.NET.Sdk">
 ```
+
+
+## NuGet Errors "error NU1100: "..." kann für "net6.0" nicht aufgelöst werden."
+
+Sometimes there are errors about dotnet not being able to resolve packages. 
+[Stackoverflow suggests](https://stackoverflow.com/questions/68283730/error-nu1100-unable-to-resolve-microsoftofficecore-15-0-0-for-net5-0) 
+executing `dotnet nuget locals all --clear` and/or deleting NuGet's configuration file *C:\Users\<username>\AppData\Roaming\NuGet* and then re-running `dotnet restore`.
