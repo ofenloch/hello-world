@@ -14,6 +14,16 @@
 #
 #   docker start dotnet-dev
 #
+# To run the image in a throw-away container execute
+#
+#    docker run --rm --name dotnet-dev -it dotnet-dev:0.0.1
+#
+# In this case you don't have to create the container.
+#
+# If you want to overwrite the entrypoint do something like
+#
+#    docker run --rm --name dotnet-dev -it --entrypoint /bin/bash dotnet-dev:0.0.1
+#
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
@@ -29,4 +39,4 @@ RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "DotNet.Docker.dll"]
+ENTRYPOINT ["./hello-world"]
