@@ -25,7 +25,8 @@ namespace Library.UnitTests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
-        [InlineData(2)]
+        // Finally fix the test, so the image gets built:
+        // [InlineData(2)]
         public void IsPrime_ValuesLessThan2_ReturnFalse(int value)
         {
             var result = Library.MyMath.IsPrime(value);
