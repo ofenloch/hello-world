@@ -6,6 +6,14 @@
 #
 #   docker build -t dotnet-dev:0.0.1 -f Dockerfile .
 #
+# Create the container with
+#
+#   docker create --name dotnet-dev dotnet-dev:0.0.1
+#
+# Run the container with 
+#
+#   docker start dotnet-dev
+#
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
