@@ -1,6 +1,3 @@
-# This is the Dockerfile from 
-# [Tutorial: Containerize a .NET app](https://docs.microsoft.com/en-us/dotnet/core/docker/build-container?tabs=linux)
-
 #
 # Build this image with
 #
