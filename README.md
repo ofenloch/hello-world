@@ -590,3 +590,76 @@ For `dotnet build` "building" this target, it must be listet as Default target i
 Sometimes there are errors about dotnet not being able to resolve packages. 
 [Stackoverflow suggests](https://stackoverflow.com/questions/68283730/error-nu1100-unable-to-resolve-microsoftofficecore-15-0-0-for-net5-0) 
 executing `dotnet nuget locals all --clear` and/or deleting NuGet's configuration file *C:\Users\<username>\AppData\Roaming\NuGet* and then re-running `dotnet restore`.
+
+## Dockerize the App
+
+We start with the Dockerfile from th MS [Tutorial: Containerize a .NET app](https://docs.microsoft.com/en-us/dotnet/core/docker/build-container?tabs=linux):
+
+```Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+WORKDIR /app
+
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "DotNet.Docker.dll"]
+```
+
+For our project we have to change the line with the 'publish' command. It must be
+
+    RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out
+
+instead of 
+
+    RUN dotnet publish -c Release -o out
+
+because we build a single, self-contained binary. Further, we have to change the ENTRYPOINT to
+
+    ENTRYPOINT ["./hello-world"]
+
+so our binary 'hello-world' is executed.
+
+To run our unit tests, we add the line
+
+    RUN dotnet test
+  
+in front of the 'publish' command.
+
+The complete Dockerfile now looks like this
+
+```Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+WORKDIR /app
+
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore
+# Run unit tests (if the tests fail the build process is stopped)
+RUN dotnet test
+# Build and publish a release
+RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["./hello-world"]
+```
+
+If the tests fail the command
+
+    RUN dotnet test
+
+returns a non-zero value and the build process is stopped. This way we make sure the app is only published if the unit tests succeed. (That's why we fix the test in file *test/UnitTest1.cs* now.)
+
+
+
