@@ -32,6 +32,8 @@ WORKDIR /app
 COPY . ./
 # Restore as distinct layers
 RUN dotnet restore
+# Run unit tests
+RUN dotnet test
 # Build and publish a release
 RUN dotnet publish -r linux-x64 --self-contained true -c Release -o out
 
