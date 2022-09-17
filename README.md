@@ -591,9 +591,9 @@ Sometimes there are errors about dotnet not being able to resolve packages.
 [Stackoverflow suggests](https://stackoverflow.com/questions/68283730/error-nu1100-unable-to-resolve-microsoftofficecore-15-0-0-for-net5-0) 
 executing `dotnet nuget locals all --clear` and/or deleting NuGet's configuration file *C:\Users\<username>\AppData\Roaming\NuGet* and then re-running `dotnet restore`.
 
-## Dockerize the App
+## Dockerizing the App
 
-We start with the Dockerfile from th MS [Tutorial: Containerize a .NET app](https://docs.microsoft.com/en-us/dotnet/core/docker/build-container?tabs=linux):
+We start with the Dockerfile from the MS [Tutorial: Containerize a .NET app](https://docs.microsoft.com/en-us/dotnet/core/docker/build-container?tabs=linux):
 
 ```Dockerfile
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
@@ -625,13 +625,13 @@ because we build a single, self-contained binary. Further, we have to change the
 
     ENTRYPOINT ["./hello-world"]
 
-so our binary 'hello-world' is executed.
+so our binary *hello-world* is executed.
 
 To run our unit tests, we add the line
 
     RUN dotnet test
   
-in front of the 'publish' command.
+in front of the publish command.
 
 The complete Dockerfile now looks like this
 
@@ -655,11 +655,15 @@ COPY --from=build-env /app/out .
 ENTRYPOINT ["./hello-world"]
 ```
 
-If the tests fail the command
+If the tests fail the command `RUN dotnet test` returns a non-zero value and the build process is stopped. This way we make sure the app is only published if the unit tests succeed. (That's why we fix the test in file *test/UnitTest1.cs* now.)
 
-    RUN dotnet test
-
-returns a non-zero value and the build process is stopped. This way we make sure the app is only published if the unit tests succeed. (That's why we fix the test in file *test/UnitTest1.cs* now.)
+With the file *.dockerignore* we exclude files from being sent to the Docker daemon for the build process. In this case it's only a couple of things that are excluded. But there may be cases where you want to keep your image as small as possible.
 
 
+### Cleaning Up Docker
 
+Once we've been developing images and containers for a while, there will be leftovers we don't need any more. To clean them we use the Docker CLI.
+
+* **Dangling Images** are images that are not tagged and not referenced by any container. To remove dangling images we execute `docker image prune`
+
+* When you stop a container, it is not automatically removed unless you started it with the `--rm` flag. To see all containers on the Docker host, including stopped containers, use `docker ps -a`. You may be surprised how many **unused containers** exist, especially on a development system! A stopped container’s writable layers still take up disk space. To clean this up, you can use the docker container prune command: `docker container prune`. Be carful: This will remove all stopped containers.
