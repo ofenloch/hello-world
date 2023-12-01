@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Build Docker Image       
 on:
 # Triggers the workflow on push request events but only for the devops branch
   push:
