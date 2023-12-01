@@ -3,7 +3,7 @@ on:
 # Triggers the workflow on push request events but only for the devops branch
   push:
     branches:
-      - devops
+      - master
 jobs:
 # This workflow contains multiple jobs
  Build:
