@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIST_DIR=~/tmp/HelloWorld
+ DIST_DIR=~/tmp/HelloWorld
 
 /bin/rm -rf ${DIST_DIR}
 /usr/bin/mkdir -p ${DIST_DIR}/linux-x64
