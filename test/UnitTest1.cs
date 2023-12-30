@@ -1,6 +1,6 @@
  using Xunit;
 
-using Library;
+ using Library;
 
 namespace Library.UnitTests
 {
